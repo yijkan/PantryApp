@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.content_list_recipes);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
