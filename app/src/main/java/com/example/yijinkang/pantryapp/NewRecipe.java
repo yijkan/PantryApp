@@ -6,19 +6,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.example.yijinkang.pantryapp.R;
-import com.example.yijinkang.pantryapp.SQLiteHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewRecipe extends AppCompatActivity {
 
     private SQLiteHelper dbHelper;
     private SimpleCursorAdapter dataAdapter;
+    private ArrayAdapter<Item> arrayAdapter;
     SQLiteDatabase dbwrite;
     SQLiteDatabase dbread;
+    List<Item> ingredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +36,41 @@ public class NewRecipe extends AppCompatActivity {
         dbwrite = dbHelper.getWritableDatabase();
         dbread = dbHelper.getReadableDatabase();
 
+        ingredients = new ArrayList<Item>();
+        ListView listview = (ListView) findViewById(R.id.ingredients);
+        arrayAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, ingredients);
+        // Set the ListView to the adapter
+        listview.setAdapter(arrayAdapter);
     }
 
     /**
      * Adds a new ingredient to the recipe
      * @param view
      */
-    public void newInt(View view) {
+    public void newIng(View view) {
+        Log.d("function call", "newIng");
 
+        EditText newIngEditText = (EditText) findViewById(R.id.newIng);
+        EditText qtyEditText = (EditText) findViewById(R.id.qty);
+        EditText unitEditText = (EditText) findViewById(R.id.unit);
+
+        String item = newIngEditText.getText().toString();
+        String qtyStr = qtyEditText.getText().toString();
+        String unit = unitEditText.getText().toString();
+        Number qty;
+
+        try {
+            qty = Double.parseDouble(qtyStr);
+            ingredients.add(new Item(item, qty, unit));
+            arrayAdapter.notifyDataSetChanged();
+            Log.d("","data set changed " + ingredients.size() + " " + arrayAdapter.getCount());
+
+            newIngEditText.setText("");
+            qtyEditText.setText("");
+            unitEditText.setText("");
+        } catch (NumberFormatException e) {
+            // bleh
+        }
     }
 
     /**
@@ -63,7 +95,7 @@ public class NewRecipe extends AppCompatActivity {
         try {
             dbwrite.beginTransaction();
 
-            dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
+//            dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
             /// etc
             dbwrite.setTransactionSuccessful();
         } catch (SQLException e) {

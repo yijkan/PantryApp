@@ -46,7 +46,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     COLUMN_RECIPE + " INTEGER NOT NULL, " +
                     COLUMN_FOOD + " TEXT NOT NULL, " +
                     COLUMN_QTY + " REAL NOT NULL, " +
-                    COLUMN_UNIT + " TEXT NOT NULL" +
+                    COLUMN_UNIT + " TEXT NULL" +
                     " );" +
             "CREATE TABLE " + TABLE_GROCERIES + " (" +
                     COLUMN_FOOD + " TEXT NOT NULL, " +

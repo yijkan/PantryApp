@@ -21,7 +21,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:onClick="save"
-            android:layout_below="@+id/instructions" />
+            android:layout_below="@+id/instructions"
+            android:layout_alignParentBottom="true" />
 
         <Button
             android:id="@+id/cancel_button"
@@ -38,40 +39,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/recipeName"
+            android:hint="Recipe name"
             android:inputType="textCapWords"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/instructions"
-            android:inputType="textCapSentences"
+            android:hint="Recipe instructions"
+            android:inputType="textMultiLine"
             android:layout_below="@+id/newIng"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"/>
 
-        <GridView
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/gridView"
+            android:layout_height="300dp"
+            android:id="@+id/ingredients"
             android:layout_below="@+id/recipeName" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/newIng"
+            android:hint="Add Ingredient"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/gridView"
             android:layout_alignRight="@+id/save_button"
             android:layout_alignEnd="@+id/save_button"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:layout_below="@+id/ingredients" />
 
         <EditText
             android:layout_width="50dp"
@@ -79,19 +83,21 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/qty"
-            android:layout_below="@+id/gridView"
+            android:hint="#"
             android:layout_toRightOf="@+id/newIng"
-            android:layout_toEndOf="@+id/newIng" />
+            android:layout_toEndOf="@+id/newIng"
+            android:layout_below="@+id/ingredients" />
 
         <EditText
-            android:layout_width="100dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:id="@+id/unit"
-            android:layout_below="@+id/gridView"
+            android:hint="units"
             android:layout_toRightOf="@+id/qty"
             android:layout_toLeftOf="@+id/add_ing"
             android:layout_toStartOf="@+id/add_ing"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:layout_below="@+id/ingredients" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -99,10 +105,10 @@
             android:layout_height="wrap_content"
             android:text="Add Ingredient"
             android:id="@+id/add_ing"
-            android:layout_below="@+id/gridView"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:onClick="newIng"/>
+            android:onClick="newIng"
+            android:layout_below="@+id/ingredients" />
 
     </RelativeLayout>
 
