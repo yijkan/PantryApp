@@ -61,7 +61,7 @@
             android:layout_below="@+id/recipeName" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/newIng"
             android:hint="Add Ingredient"
