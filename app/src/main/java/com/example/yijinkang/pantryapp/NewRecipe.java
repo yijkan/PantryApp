@@ -41,6 +41,18 @@ public class NewRecipe extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, ingredients);
         // Set the ListView to the adapter
         listview.setAdapter(arrayAdapter);
+
+//        Log.d("","*****");
+//
+//        Cursor recipes = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_RECIPES, new String[]{});
+//        while (recipes.moveToNext()) {
+//            Log.d("loaded from database", recipes.getInt(0) + recipes.getString(1) + "\n");
+//        }
+//
+//        Cursor ingredients = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_INGR, new String[]{});
+//        while (ingredients.moveToNext()) {
+//            Log.d("loaded from database", ingredients.getInt(0) + ingredients.getString(1) + "\n");
+//        }
     }
 
     /**
@@ -85,27 +97,41 @@ public class NewRecipe extends AppCompatActivity {
         ContentValues recipeValues = new ContentValues();
         recipeValues.put(SQLiteHelper.COLUMN_RECIPENAME, name);
         recipeValues.put(SQLiteHelper.COLUMN_INSTR, instr);
+        recipeValues.put(SQLiteHelper.COLUMN_TYPE, "breakfast");
 
+        long recipeID = dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
 
+        if (recipeID < 0) {
+            // TODO some error handling
+            return;
+        }
 
-        // TODO ingredients?
+        ArrayList<ContentValues> ingredientCVs = new ArrayList<ContentValues>();
 
         // for loop...
-        ContentValues ingValues = new ContentValues();
+        for (Item ing : ingredients) {
+            ContentValues itemValues = new ContentValues();
+            itemValues.put(SQLiteHelper.COLUMN_RECIPE, recipeID);
+            itemValues.put(SQLiteHelper.COLUMN_FOOD, ing.getName());
+            itemValues.put(SQLiteHelper.COLUMN_QTY, (Double) ing.getQty());
+            itemValues.put(SQLiteHelper.COLUMN_UNIT, ing.getUnit());
+
+            ingredientCVs.add(itemValues);
+        }
+
         try {
             dbwrite.beginTransaction();
 
-//            dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
-            /// etc
+            for (ContentValues ingredientCV : ingredientCVs) {
+                dbwrite.insert(SQLiteHelper.TABLE_INGR, null, ingredientCV);
+            }
+
             dbwrite.setTransactionSuccessful();
         } catch (SQLException e) {
-
+            // TODO error handling
         } finally {
             dbwrite.endTransaction();
         }
-
-
-//        this.getContentResolver().bulkInsert(SQLiteHelper.TABLE_INGR, values);
 
     }
 
