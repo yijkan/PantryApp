@@ -1,7 +1,6 @@
 package com.example.yijinkang.pantryapp;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -135,8 +134,6 @@ public class NewRecipe extends AppCompatActivity {
             dbwrite.endTransaction();
         }
 
-        Intent i = new Intent(this, ListRecipes.class);
-        startActivity(i);
     }
 
     /**
@@ -144,7 +141,6 @@ public class NewRecipe extends AppCompatActivity {
      * @param view
      */
     public void cancel(View view) {
-        Intent i = new Intent(this, ListRecipes.class);
-        startActivity(i);
+
     }
 }
