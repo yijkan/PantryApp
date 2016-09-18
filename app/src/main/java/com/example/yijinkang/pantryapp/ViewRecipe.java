@@ -10,14 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.example.yijinkang.pantryapp.R;
+
+import in.uncod.android.bypass.Bypass;
 
 public class ViewRecipe extends AppCompatActivity {
 
     private SQLiteHelper dbHelper;
     private SimpleCursorAdapter dataAdapter;
     SQLiteDatabase dbread;
+
+    Recipe myRecipe;
 
     // TODO: parent needs to send the recipe ID in the intent
     private Intent parentIntent = getIntent();
@@ -42,6 +47,13 @@ public class ViewRecipe extends AppCompatActivity {
         dbHelper = new SQLiteHelper(this);
         dbread = dbHelper.getReadableDatabase();
 
-        Cursor resultSet = dbread.rawQuery("select * from " + dbHelper.TABLE_RECIPES + " where " + dbHelper.COLUMN_ID + " = " + recipeID, new String[0]);
+        myRecipe = new Recipe(dbread, recipeID);
+
+        toolbar.setTitle(myRecipe.name);
+
+        CharSequence instructionsMarkdown = new Bypass().markdownToSpannable(myRecipe.instructions);
+
+        TextView instrTextBox = (TextView) findViewById(R.id.instructions);
+        instrTextBox.setText(instructionsMarkdown);
     }
 }

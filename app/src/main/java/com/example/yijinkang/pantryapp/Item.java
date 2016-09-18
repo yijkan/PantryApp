@@ -26,10 +26,18 @@ public class Item {
         this.unit = unit;
     }
 
-    public Item(Cursor c) {
-        this.name = c.getString(1);
-        this.qty = c.getFloat(2);
-        this.unit = c.getString(3);
+    public static final int TABLE_INGREDIENTS = 1;
+    public static final int TABLE_GROCERIES = 0;
+
+    /**
+     * Constructs a new {@code Item} from a SQLite result set.
+     * @param c A {@link Cursor} with the result of a query to the specified {@code table}
+     * @param table either {@link #TABLE_INGREDIENTS} or {@link #TABLE_GROCERIES}
+     */
+    public Item(Cursor c, int table) {
+        this.name = c.getString(0 + table);
+        this.qty = c.getFloat(1 + table);
+        this.unit = c.getString(2 + table);
     }
 
     public String getName() {
