@@ -20,7 +20,7 @@ public class NewRecipe extends AppCompatActivity {
 
     private SQLiteHelper dbHelper;
     private SimpleCursorAdapter dataAdapter;
-    private ArrayAdapter<Item> arrayAdapter;
+    private ArrayAdapter<Item> ingredientsAdapter;
     SQLiteDatabase dbwrite;
     SQLiteDatabase dbread;
     List<Item> ingredients;
@@ -38,9 +38,21 @@ public class NewRecipe extends AppCompatActivity {
 
         ingredients = new ArrayList<Item>();
         ListView listview = (ListView) findViewById(R.id.ingredients);
-        arrayAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, ingredients);
+        ingredientsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, ingredients);
         // Set the ListView to the adapter
-        listview.setAdapter(arrayAdapter);
+        listview.setAdapter(ingredientsAdapter);
+
+//        Log.d("","*****");
+//
+//        Cursor recipes = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_RECIPES, new String[]{});
+//        while (recipes.moveToNext()) {
+//            Log.d("loaded from database", recipes.getInt(0) + recipes.getString(1) + "\n");
+//        }
+//
+//        Cursor ingredients = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_INGR, new String[]{});
+//        while (ingredients.moveToNext()) {
+//            Log.d("loaded from database", ingredients.getInt(0) + ingredients.getString(1) + "\n");
+//        }
     }
 
     /**
@@ -62,8 +74,8 @@ public class NewRecipe extends AppCompatActivity {
         try {
             qty = Double.parseDouble(qtyStr);
             ingredients.add(new Item(item, qty, unit));
-            arrayAdapter.notifyDataSetChanged();
-            Log.d("","data set changed " + ingredients.size() + " " + arrayAdapter.getCount());
+            ingredientsAdapter.notifyDataSetChanged();
+            Log.d("","data set changed " + ingredients.size() + " " + ingredientsAdapter.getCount());
 
             newIngEditText.setText("");
             qtyEditText.setText("");
@@ -81,31 +93,46 @@ public class NewRecipe extends AppCompatActivity {
     public void save(View view) {
         String name = ((EditText) findViewById(R.id.recipeName)).getText().toString();
         String instr = ((EditText) findViewById(R.id.instructions)).getText().toString();
+        String type = ((EditText) findViewById(R.id.type)).getText().toString();
 
         ContentValues recipeValues = new ContentValues();
         recipeValues.put(SQLiteHelper.COLUMN_RECIPENAME, name);
         recipeValues.put(SQLiteHelper.COLUMN_INSTR, instr);
+        recipeValues.put(SQLiteHelper.COLUMN_TYPE, type);
 
+        long recipeID = dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
 
+        if (recipeID < 0) {
+            // TODO some error handling
+            return;
+        }
 
-        // TODO ingredients?
+        ArrayList<ContentValues> ingredientCVs = new ArrayList<ContentValues>();
 
         // for loop...
-        ContentValues ingValues = new ContentValues();
+        for (Item ing : ingredients) {
+            ContentValues itemValues = new ContentValues();
+            itemValues.put(SQLiteHelper.COLUMN_RECIPE, recipeID);
+            itemValues.put(SQLiteHelper.COLUMN_FOOD, ing.getName());
+            itemValues.put(SQLiteHelper.COLUMN_QTY, (Double) ing.getQty());
+            itemValues.put(SQLiteHelper.COLUMN_UNIT, ing.getUnit());
+
+            ingredientCVs.add(itemValues);
+        }
+
         try {
             dbwrite.beginTransaction();
 
-//            dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, recipeValues);
-            /// etc
+            for (ContentValues ingredientCV : ingredientCVs) {
+                dbwrite.insert(SQLiteHelper.TABLE_INGR, null, ingredientCV);
+            }
+
             dbwrite.setTransactionSuccessful();
         } catch (SQLException e) {
-
+            // TODO error handling
         } finally {
             dbwrite.endTransaction();
         }
-
-
-//        this.getContentResolver().bulkInsert(SQLiteHelper.TABLE_INGR, values);
 
     }
 

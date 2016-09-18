@@ -12,7 +12,6 @@
     tools:context="com.example.yijinkang.pantryapp.ListRecipes"
     tools:showIn="@layout/activity_list_recipes"
     android:weightSum="1">
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

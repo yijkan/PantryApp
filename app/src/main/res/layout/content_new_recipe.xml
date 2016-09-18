@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.yijinkang.pantryapp.NewRecipe"
-    tools:showIn="@layout/activity_new_recipe">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -21,8 +13,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:onClick="save"
-            android:layout_below="@+id/instructions"
-            android:layout_alignParentBottom="true" />
+            android:layout_below="@+id/type"
+            android:layout_alignParentBottom="false" />
 
         <Button
             android:id="@+id/cancel_button"
@@ -30,10 +22,11 @@
             android:layout_height="wrap_content"
             android:text="@string/cancel"
             android:layout_gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentBottom="false"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:onClick="cancel"/>
+            android:onClick="cancel"
+            android:layout_below="@+id/type" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -45,7 +38,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:forceHasOverlappingRendering="false"
+            android:textSize="32dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -61,19 +56,17 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:id="@+id/ingredients"
             android:layout_below="@+id/recipeName" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/newIng"
             android:hint="Add Ingredient"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/save_button"
-            android:layout_alignEnd="@+id/save_button"
             android:inputType="textCapWords"
             android:layout_below="@+id/ingredients" />
 
@@ -83,9 +76,9 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/qty"
-            android:hint="#"
             android:layout_toRightOf="@+id/newIng"
             android:layout_toEndOf="@+id/newIng"
+            android:hint="#"
             android:layout_below="@+id/ingredients" />
 
         <EditText
@@ -110,6 +103,11 @@
             android:onClick="newIng"
             android:layout_below="@+id/ingredients" />
 
-    </RelativeLayout>
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/type"
+        android:layout_below="@+id/instructions"
+        android:hint="Food Category"/>
 
-</android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
