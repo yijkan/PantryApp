@@ -1,5 +1,6 @@
 package com.example.yijinkang.pantryapp;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.SQLException;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,14 +19,22 @@ import android.widget.SimpleCursorAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewRecipe extends AppCompatActivity {
+public class NewRecipe extends AppCompatActivity implements View.OnFocusChangeListener {
 
     private SQLiteHelper dbHelper;
     private SimpleCursorAdapter dataAdapter;
-    private ArrayAdapter<Item> ingredientsAdapter;
     SQLiteDatabase dbwrite;
     SQLiteDatabase dbread;
+
+    EditText recipeNameField;
+    EditText instructionsField;
+    EditText foodTypeField;
+    EditText newIngEditText;
+    EditText qtyEditText;
+    EditText unitEditText;
+
     List<Item> ingredients;
+    private ArrayAdapter<Item> ingredientsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,19 @@ public class NewRecipe extends AppCompatActivity {
         dbHelper = new SQLiteHelper(this);
         dbwrite = dbHelper.getWritableDatabase();
         dbread = dbHelper.getReadableDatabase();
+
+        recipeNameField = (EditText) findViewById(R.id.recipeName);
+        recipeNameField.setOnFocusChangeListener(this);
+        instructionsField = (EditText) findViewById(R.id.instructions);
+        instructionsField.setOnFocusChangeListener(this);
+        foodTypeField = (EditText) findViewById(R.id.type);
+        foodTypeField.setOnFocusChangeListener(this);
+        newIngEditText = (EditText) findViewById(R.id.newIng);
+        newIngEditText.setOnFocusChangeListener(this);
+        qtyEditText = (EditText) findViewById(R.id.qty);
+        qtyEditText.setOnFocusChangeListener(this);
+        unitEditText = (EditText) findViewById(R.id.unit);
+        unitEditText.setOnFocusChangeListener(this);
 
         ingredients = new ArrayList<Item>();
         ListView listview = (ListView) findViewById(R.id.ingredients);
@@ -56,16 +79,20 @@ public class NewRecipe extends AppCompatActivity {
 //        }
     }
 
+    @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if (!hasFocus) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     /**
      * Adds a new ingredient to the recipe
      * @param view
      */
     public void newIng(View view) {
         Log.d("function call", "newIng");
-
-        EditText newIngEditText = (EditText) findViewById(R.id.newIng);
-        EditText qtyEditText = (EditText) findViewById(R.id.qty);
-        EditText unitEditText = (EditText) findViewById(R.id.unit);
 
         String item = newIngEditText.getText().toString();
         String qtyStr = qtyEditText.getText().toString();
@@ -92,9 +119,9 @@ public class NewRecipe extends AppCompatActivity {
      * @param view
      */
     public void save(View view) {
-        String name = ((EditText) findViewById(R.id.recipeName)).getText().toString();
-        String instr = ((EditText) findViewById(R.id.instructions)).getText().toString();
-        String type = ((EditText) findViewById(R.id.type)).getText().toString();
+        String name = recipeNameField.getText().toString();
+        String instr = instructionsField.getText().toString();
+        String type = foodTypeField.getText().toString();
 
         ContentValues recipeValues = new ContentValues();
         recipeValues.put(SQLiteHelper.COLUMN_RECIPENAME, name);
