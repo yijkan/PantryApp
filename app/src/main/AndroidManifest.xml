@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ListRecipes"
+            android:label="@string/title_activity_list_recipes"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".NewRecipe"
             android:label="@string/title_activity_new_recipe"
             android:theme="@style/AppTheme.NoActionBar">
