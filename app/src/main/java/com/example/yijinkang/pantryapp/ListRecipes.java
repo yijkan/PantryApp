@@ -1,5 +1,6 @@
 package com.example.yijinkang.pantryapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class ListRecipes extends AppCompatActivity implements AdapterView.OnItem
     ListView recipeList;
     ArrayAdapter recipesAdapter;
     SQLiteHelper dbHelper;
+    SQLiteDatabase dbwrite;
     SQLiteDatabase dbread;
 
     //String[] recipeNames = getResources().getStringArray(R.array.recipeNames);
@@ -36,9 +38,15 @@ public class ListRecipes extends AppCompatActivity implements AdapterView.OnItem
 
         //Pulls stored recipes from the database.
         dbHelper = new SQLiteHelper(this);
+        dbwrite = dbHelper.getWritableDatabase();
         dbread = dbHelper.getReadableDatabase();
         //the String[] specifies which column you want from the database. if it's empty, it returns all columns
         Cursor c = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_RECIPES, new String[]{});
+
+        ContentValues cv = new ContentValues();
+        cv.put(SQLiteHelper.COLUMN_RECIPENAME,"Iced Tea");
+        cv.put(SQLiteHelper.COLUMN_INSTR, "Brew tea and add lemon juice.");
+        dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, cv);
 
         while (c.moveToNext()) { //returns true if successful
             recipeNames.add(c.getString(1));
