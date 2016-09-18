@@ -8,5 +8,6 @@
     <string name="cancel">Cancel</string>
 
     <string name="title_activity_view_recipe">ViewRecipe</string>
+    <string name="title_activity_list_recipes">Recipes</string>
 
 </resources>
