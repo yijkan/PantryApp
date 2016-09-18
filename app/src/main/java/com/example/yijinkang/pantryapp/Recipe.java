@@ -25,4 +25,8 @@ public class Recipe {
         this.instructions = c.getString(2);
     }
 
+    public String getName() {
+        return this.name;
+    }
+
 }
