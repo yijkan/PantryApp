@@ -1,15 +1,31 @@
 package com.example.yijinkang.pantryapp;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.database.Cursor;
 
-public class ListRecipes extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListRecipes extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    ListView recipeList;
+    ArrayAdapter recipesAdapter;
+    SQLiteHelper dbHelper;
+    SQLiteDatabase dbwrite;
+    SQLiteDatabase dbread;
+
+    //String[] recipeNames = getResources().getStringArray(R.array.recipeNames);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +34,33 @@ public class ListRecipes extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        List<String> recipeNames = new ArrayList<>();
+
+        //Pulls stored recipes from the database.
+        dbHelper = new SQLiteHelper(this);
+        dbwrite = dbHelper.getWritableDatabase();
+        dbread = dbHelper.getReadableDatabase();
+        //the String[] specifies which column you want from the database. if it's empty, it returns all columns
+        Cursor c = dbread.rawQuery("select * from " + SQLiteHelper.TABLE_RECIPES, new String[]{});
+
+        ContentValues cv = new ContentValues();
+        cv.put(SQLiteHelper.COLUMN_RECIPENAME,"Iced Tea");
+        cv.put(SQLiteHelper.COLUMN_INSTR, "Brew tea and add lemon juice.");
+        dbwrite.insert(SQLiteHelper.TABLE_RECIPES, null, cv);
+
+        while (c.moveToNext()) { //returns true if successful
+            recipeNames.add(c.getString(1));
+        }
+        //finds the (ListView) recipeList object inside the GUI
+        recipeList = (ListView) findViewById(R.id.listedRecipes);
+
+
+        //adapter pulls String names from recipeNames, dumps into adapter
+        recipesAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, recipeNames);
+        //adapter assigns data to (ListView) recipeList
+        recipeList.setAdapter(recipesAdapter);
+
+        recipeList.setOnItemClickListener(this);
     }
 
     @Override
@@ -49,4 +84,10 @@ public class ListRecipes extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        Intent i = new Intent(this, ViewRecipe.class);
+        startActivity(i);
+    }
+
 }

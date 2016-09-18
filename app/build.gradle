@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
 }
 
@@ -24,6 +27,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     // compile 'in.uncod.android.bypass:bypass:1.1'
     // Bypass (Markdown library for Android) from https://github.com/Commit451/bypasses
     compile 'com.github.Commit451:bypasses:1.0.4'
